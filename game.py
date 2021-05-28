@@ -1,5 +1,6 @@
 from random import random
 import pyxel
+pyxel.init(160, 120)
 
 SCENE_TITLE = 0
 SCENE_PLAY = 1
@@ -44,10 +45,7 @@ class Background:
     def __init__(self):
         self.star_list = []
         for i in range(STAR_COUNT):
-            self.star_list.append(
-                (random() * pyxel.width, random() * pyxel.
-height, random() * 1.5 + 1)
-    )
+            self.star_list.append((random() * pyxel.width, random() * pyxel.height, random() * 1.5 + 1))
     
     def update(self):
         for i, (x, y, speed) in enumerate(self.star_list):
@@ -87,8 +85,7 @@ class Player:
 
         if pyxel.btnp(pyxel.KEY_SPACE):
             Bullet(
-                self.x + (PLAYER_WIDTH - BULLET_WIDTH) /
-2, self.y - BULLET_HEIGHT / 2
+                self.x + (PLAYER_WIDTH - BULLET_WIDTH) /2, self.y - BULLET_HEIGHT / 2
     )
 
     pyxel.play(0, 0)
@@ -166,19 +163,19 @@ class App:
     def __init__(self):
         pyxel.init(120, 160, caption="Retro Shooter Game")
 
-    pyxel.image(0).set(0,0,[“00c00c00”, “0c7007c0”, “0c7007c0”, “c703b07c”, “77033077”, “785cc587”, “85c77c58”, “0c0880c0”])
+        pyxel.image(0).set(0,0,["00c00c00", "0c7007c0", "0c7007c0", "c703b07c", "77033077", "785cc587", "85c77c58", "0c0880c0"])
 
-    pyxel.image(0).set(8,0,[“00088000”,“00ee1200”,“08e2b180”,“02882820”,“00222200”,“00012280”,“08208008”,“80008000”])
+        pyxel.image(0).set(8,0,["00088000","00ee1200","08e2b180","02882820","00222200","00012280","08208008","80008000"])
 
-    pyxel.sound(0).set("a3a2c1a1”, “p”, “7”, “s”, 5)
+        pyxel.sound(0).set("a3a2c1a1", "p", "7", "s", 5)
 
-     pyxel.sound(1).set("a3a2c2c2”, “n”, “7742”, “s”, 10) 
+        pyxel.sound(1).set("a3a2c2c2", "n", "7742", "s", 10) 
 
-    self.scene = SCENE_TITLE
-    self.score = 0
-    self.background = Background()
-    self.player = Player(pyxel.width / 2, pyxel.height - 20)
-    pyxel.run(self.update, self.draw)
+        self.scene = SCENE_TITLE
+        self.score = 0
+        self.background = Background()
+        self.player = Player(pyxel.width / 2, pyxel.height - 20)
+        pyxel.run(self.update, self.draw)
 
     def update(self):
         if pyxel.btnp(pyxel.KEY_Q):
@@ -197,39 +194,37 @@ class App:
 
     def update_play_scene(self):
         if pyxel.frame_count % 6 == 0:
-            Enemy(random() * (pyxel.width - PLAYER_
-WIDTH), 0)
-    for a in enemy_list:
-        for b in bullet_list:
-            if (a.x + a.w > b.x
-                and b.x + b.w > a.x
-                and a.y + a.h > b.y
-                and b.y + b.h > a.y):
-                a.alive = False
-                b.alive = False
-                blast_list.append(Blast(a.x + ENEMY_WIDTH
-/ 2, a.y + ENEMY_HEIGHT / 2))
-                pyxel.play(1, 1)
-                self.score += 10
-        for enemy in enemy_list:
-            if (self.player.x + self.player.w > enemy.x
-                and enemy.x + enemy.w > self.player.x
-                and self.player.y + self.player.h > enemy.y
-                and enemy.y + enemy.h > self.player.y):
-                enemy.alive = False
-                blast_list.append(
-                    Blast(
-                        self.player.x + PLAYER_WIDTH / 2,
-                        self.player.y + PLAYER_HEIGHT / 2,))
-                pyxel.play(1, 1)
-                self.scene = SCENE_GAMEOVER
-        self.player.update()
-        update_list(bullet_list)
-        update_list(enemy_list)
-        update_list(blast_list)
-        cleanup_list(enemy_list)
-        cleanup_list(bullet_list)
-        cleanup_list(blast_list)
+            Enemy(random() * (pyxel.width - PLAYER_WIDTH), 0)
+        for a in enemy_list:
+            for b in bullet_list:
+                if (a.x + a.w > b.x
+                    and b.x + b.w > a.x
+                    and a.y + a.h > b.y
+                    and b.y + b.h > a.y):
+                    a.alive = False
+                    b.alive = False
+                    blast_list.append(Blast(a.x + ENEMY_WIDTH/ 2, a.y + ENEMY_HEIGHT / 2))
+                    pyxel.play(1, 1)
+                    self.score += 10
+            for enemy in enemy_list:
+                if (self.player.x + self.player.w > enemy.x
+                    and enemy.x + enemy.w > self.player.x
+                    and self.player.y + self.player.h > enemy.y
+                    and enemy.y + enemy.h > self.player.y):
+                    enemy.alive = False
+                    blast_list.append(
+                        Blast(
+                            self.player.x + PLAYER_WIDTH / 2,
+                            self.player.y + PLAYER_HEIGHT / 2,))
+                    pyxel.play(1, 1)
+                    self.scene = SCENE_GAMEOVER
+            self.player.update()
+            update_list(bullet_list)
+            update_list(enemy_list)
+            update_list(blast_list)
+            cleanup_list(enemy_list)
+            cleanup_list(bullet_list)
+            cleanup_list(blast_list)
 
     def update_gameover_scene(self):
         update_list(bullet_list)
@@ -259,12 +254,11 @@ WIDTH), 0)
         elif self.scene == SCENE_GAMEOVER:
             self.draw_gameover_scene()
         
-        pyxel.text(39, 4, “SCORE {:5}”.format(self.score), 7)
+        pyxel.text(39, 4, "SCORE {:5}".format(self.score), 7)
 
     def draw_title_scene(self):
-        pyxel.text(35, 66, “Start Shooter”, pyxel.frame_
-count % 16)
-        pyxel.text(31, 126, “- PRESS ENTER -”, 13)
+        pyxel.text(35, 66, "Start Shooter", pyxel.frame_count % 16)
+        pyxel.text(31, 126, "- PRESS ENTER -", 13)
 
     def draw_play_scene(self):
         self.player.draw()
